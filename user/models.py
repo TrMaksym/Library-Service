@@ -49,3 +49,11 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email
+
+
+class Borrowing(models.Model):
+    borrow = models.DateField()
+    Expected_return = models.DateField()
+    Actual_return = models.DateField(null=True, blank=True)
+    Book_id = models.IntegerField()
+    User_id = models.IntegerField()
