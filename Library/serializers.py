@@ -13,9 +13,16 @@ class BookSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, min_length=6, required=True)
+
     class Meta:
         model = User
-        fields = ("first_name","last_name", "email")
+        fields = ("id", "email", "first_name", "last_name", "password")
+        read_only_fields = ("id",)
+
+    def create(self, validated_data):
+        return User.objects.create_user(**validated_data)
+
 
 class BorrowingSerializer(serializers.ModelSerializer):
     class Meta:
