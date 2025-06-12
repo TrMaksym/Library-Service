@@ -15,8 +15,8 @@ def get_chat_id_by_username(username):
     params = {"chat_id": username}
     response = requests.get(url, params=params)
     data = response.json()
-    if data['ok']:
-        return data['result']['id']
+    if data["ok"]:
+        return data["result"]["id"]
     else:
         print(f"Error getting chat_id: {data}")
         return None
@@ -24,10 +24,7 @@ def get_chat_id_by_username(username):
 
 def send_telegram_message(chat_id, text):
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
-    payload = {
-        'chat_id': chat_id,
-        'text': text
-    }
+    payload = {"chat_id": chat_id, "text": text}
 
     response = requests.post(url, data=payload)
     print("Telegram response:", response.status_code, response.text)

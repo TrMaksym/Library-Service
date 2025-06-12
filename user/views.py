@@ -16,8 +16,10 @@ class ManageUserView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         return self.request.user
 
+
 class UserCreateView(generics.CreateAPIView):
     serializer_class = UserSerializer
+
 
 class BorrowingsViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]

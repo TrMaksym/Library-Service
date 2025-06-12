@@ -21,8 +21,8 @@ class BookViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
-        title = request.query_params.get('title', None)
-        author = request.query_params.get('author', None)
+        title = request.query_params.get("title", None)
+        author = request.query_params.get("author", None)
 
         if title:
             queryset = queryset.filter(title__icontains=title)
@@ -33,7 +33,7 @@ class BookViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
+        partial = kwargs.pop("partial", False)
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)

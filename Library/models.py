@@ -41,6 +41,5 @@ class Payment(models.Model):
     session_id = models.CharField(max_length=100)
     money_to_pay = models.DecimalField(max_digits=10, decimal_places=2)
 
-
     def __str__(self):
         return f"Payment {self.id} - {self.status}"

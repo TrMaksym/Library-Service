@@ -6,6 +6,7 @@ from user.models import Borrowing
 
 User = get_user_model()
 
+
 class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
@@ -25,9 +26,34 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class BorrowingSerializer(serializers.ModelSerializer):
+    telegram_username = serializers.CharField(
+        source="User.telegram_username",
+        required=False,
+        allow_null=True,
+        allow_blank=True,
+    )
+
     class Meta:
         model = Borrowing
-        fields = ("Book_id", "Expected_return", "Actual_return", "User_id")
+        fields = "__all__"
+
+    def validate(self, attrs):
+        user = self.context["request"].user
+        telegram_username = attrs.get("User", {}).get("telegram_username")
+        if not user.telegram_username and not telegram_username:
+            raise serializers.ValidationError("Need to enter telegram_username.")
+        return attrs
+
+    def create(self, validated_data):
+        user = self.context["request"].user
+        telegram_username = validated_data.get("User", {}).get("telegram_username")
+        if telegram_username and user.telegram_username != telegram_username:
+            user.telegram_username = telegram_username
+            user.save()
+        validated_data["User"] = user
+        borrowing = Borrowing.objects.create(**validated_data)
+        return borrowing
+
 
 class PaymentsSerializer(serializers.ModelSerializer):
     class Meta:

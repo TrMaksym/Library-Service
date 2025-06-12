@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+
 import os
 from datetime import timedelta
 from pathlib import Path
@@ -46,9 +47,8 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "django_celery_beat",
     "notifications.apps.NotificationsConfig",
-
     "Library",
-    "user"
+    "user",
 ]
 
 MIDDLEWARE = [
@@ -66,8 +66,7 @@ ROOT_URLCONF = "Library_Service.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / 'templates']
-        ,
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
