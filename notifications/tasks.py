@@ -5,8 +5,6 @@ from Library.models import Book
 from notifications.telegram import send_telegram_message, get_chat_id_by_username
 from user.models import Borrowing, User
 
-chat_id = 954524211
-
 
 @shared_task(name="notifications.tasks.send_telegram_message_task")
 def send_telegram_message_task(identifier, text):
