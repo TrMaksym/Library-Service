@@ -1,8 +1,10 @@
-from django.shortcuts import render
-from django_restframework.serializers import serializer
+
+from django.utils import timezone
 from rest_framework import generics, viewsets
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from Library.models import Book
 from Library.serializers import UserSerializer, BorrowingSerializer
@@ -61,3 +63,28 @@ class BorrowingsViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+    @action(detail=True, methods=["post"], permission_classes=[IsAuthenticated])
+    def return_book(self, request, pk=None):
+        borrowing = self.get_object()
+        if borrowing.Actual_return is not None:
+            return Response({"error": "Book is already returned"}, status=400)
+        book = Book.objects.get(id=borrowing.Book_id)
+        book.Inventory += 1
+        book.save()
+        borrowing.Actual_return = request.user
+        borrowing.save()
+        borrowing.Actual_return = timezone.now().date()
+        borrowing.save()
+        return Response(self.get_serializer(borrowing).data)
+
+
+class StripeSuccessView(APIView):
+    def get(self, request):
+        return Response({"message": "Success!"}, status=200)
+
+
+class StripeCancelView(APIView):
+    def get(self, request):
+        return Response({"message": "Cancel!"}, status=200)
+

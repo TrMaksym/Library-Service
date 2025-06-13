@@ -6,7 +6,7 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 )
 
-from .views import ManageUserView, UserCreateView
+from .views import ManageUserView, UserCreateView, StripeSuccessView, StripeCancelView
 
 app_name = "user"
 urlpatterns = [

@@ -4,8 +4,8 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from Library.models import Book
-from Library.serializers import BookSerializer
+from Library.models import Book, Payment
+from Library.serializers import BookSerializer, PaymentsSerializer
 
 
 class BookViewSet(viewsets.ModelViewSet):
@@ -44,3 +44,8 @@ class BookViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class PaymentsViewSet(viewsets.ModelViewSet):
+    queryset = Payment.objects.all()
+    serializer_class = PaymentsSerializer
