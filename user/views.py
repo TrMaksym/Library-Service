@@ -1,13 +1,14 @@
 
 from django.utils import timezone
 from rest_framework import generics, viewsets
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from Library.models import Book
-from Library.serializers import UserSerializer, BorrowingSerializer
+from Library.serializers import BorrowingSerializer
+from user.serializers import UserSerializer
 from user.models import Borrowing
 
 
@@ -88,3 +89,12 @@ class StripeCancelView(APIView):
     def get(self, request):
         return Response({"message": "Cancel!"}, status=200)
 
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def telegram_link(request):
+    user = request.user
+    token = user.get_or_create_telegram_link_token()
+    bot_username = "Borrow_watch_bot"
+    tg_link = f"https://t.me/{bot_username}?start={token}"
+    return Response({"telegram_link": tg_link})

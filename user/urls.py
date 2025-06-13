@@ -6,11 +6,13 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 )
 
-from .views import ManageUserView, UserCreateView, StripeSuccessView, StripeCancelView
+from .views import ManageUserView, UserCreateView, StripeSuccessView, StripeCancelView, telegram_link
 
 app_name = "user"
 urlpatterns = [
     path("", UserCreateView.as_view(), name="register"),
+    path("api/telegram-link/", telegram_link, name="telegram-link"),
+
     path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("me/", ManageUserView.as_view(), name="me"),

@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
@@ -37,6 +39,8 @@ class User(AbstractUser):
     email = models.EmailField(_("email address"), unique=True)
     telegram_username = models.CharField(max_length=100, null=True, blank=True)
     telegram_chat_id = models.BigIntegerField(null=True, blank=True)
+    telegram_link_token = models.CharField(max_length=64, unique=True, null=True, blank=True, default=None)
+
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -45,6 +49,12 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email
+
+    def get_or_create_telegram_link_token(self):
+        if not self.telegram_link_token:
+            self.telegram_link_token = uuid.uuid4().hex
+            self.save(update_fields=["telegram_link_token"])
+        return self.telegram_link_token
 
 
 class Borrowing(models.Model):
